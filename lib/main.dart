@@ -5,7 +5,8 @@ import 'package:get/get.dart';
 import 'Screens/splash_screen.dart';
 import 'Services/controller.dart';
 
-void configLoading() {
+void configLoading()  
+{
   EasyLoading.instance
     ..displayDuration = const Duration(milliseconds: 2000)
     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
