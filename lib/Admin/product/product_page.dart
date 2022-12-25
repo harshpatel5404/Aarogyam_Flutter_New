@@ -9,6 +9,7 @@ import 'package:aarogyamswadeshi/Services/product_services.dart';
 import 'package:aarogyamswadeshi/Services/subcategory_service.dart';
 import 'package:flutter/material.dart';
 import 'package:aarogyamswadeshi/Constants/constants.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
@@ -45,8 +46,6 @@ class _ProductPageState extends State<ProductPage> {
               var data = productController.productlist[index];
               String imgString = data["productimagepath"];
               Uint8List img = base64.decode(imgString);
-              // print("get" + img.lengthInBytes.toString());
-              // print(data);
               return Container(
                 height: Get.height * 0.16,
                 width: Get.width,
@@ -81,7 +80,7 @@ class _ProductPageState extends State<ProductPage> {
                                 fit: BoxFit.fill,
                               ),
                             )
-                          : Text("imgs "),
+                          : Text("img..."),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -91,78 +90,121 @@ class _ProductPageState extends State<ProductPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("ProductId : ${data['productId']}"),
-                            Text("Name: ${data['productName']}"),
-                            Text("GName: ${data['productGName']}"),
+                            Text(
+                              "Name: ${data['productName']}",
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              "Weight: ${data['weight']}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              "Price: ${data['price']}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            // Text("GName: ${data['productGName']}"),
                           ],
                         ),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        alignment: Alignment.bottomRight,
-                        child: Row(
-                          children: [
-                            InkWell(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
                               onTap: () {
-                                Get.to(UpdateProductPage(
-                                  data: data,
-                                  img: img,
-                                ));
+                                print(data);
+                                Map productData = {
+                                  "categoryId": data["categoryId"],
+                                  "subcategoryId": data["subcategoryId"],
+                                  "englishname": data["productName"],
+                                  "gujaratiname": data["productGName"],
+                                  "productDesc": data["productDesc"],
+                                  "productGDesc": data["productGDesc"],
+                                  "price": data["price"],
+                                  "brandName": data["brandName"],
+                                  "WeightType": "Metre",
+                                  "productimagepath": data["productimagepath"],
+                                };
+                                addProduct(productData, isClone: true)
+                                    .then((value) {
+                                  EasyLoading.dismiss();
+                                  Fluttertoast.showToast(msg: value);
+                                });
                               },
-                              child: Icon(
-                                Icons.edit,
-                                size: 23,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (ctx) => AlertDialog(
-                                          content: Text(
-                                              "Are You Sure Want to Delete Product?"),
-                                          actions: <Widget>[
-                                            ElevatedButton(
-                                              child: Text("Close"),
-                                              onPressed: () {
-                                                Get.back();
-                                              },
-                                            ),
-                                            ElevatedButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          kPrimaryColor)),
-                                              child: Text("Ok"),
-                                              onPressed: () {
-                                                deleteProduct(data["productId"])
-                                                    .then((value) {
-                                                  Fluttertoast.showToast(
-                                                      msg: value);
-                                                });
+                              child: Icon(Icons.copy)),
+                          Container(
+                            alignment: Alignment.bottomRight,
+                            child: Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Get.to(UpdateProductPage(
+                                      data: data,
+                                      img: img,
+                                    ));
+                                  },
+                                  child: Icon(
+                                    Icons.edit,
+                                    size: 23,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (ctx) => AlertDialog(
+                                              content: Text(
+                                                  "Are You Sure Want to Delete Product?"),
+                                              actions: <Widget>[
+                                                ElevatedButton(
+                                                  child: Text("Close"),
+                                                  onPressed: () {
+                                                    Get.back();
+                                                  },
+                                                ),
+                                                ElevatedButton(
+                                                  style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .all(
+                                                                  kPrimaryColor)),
+                                                  child: Text("Ok"),
+                                                  onPressed: () {
+                                                    deleteProduct(
+                                                            data["productId"])
+                                                        .then((value) {
+                                                      Fluttertoast.showToast(
+                                                          msg: value);
+                                                    });
 
-                                                productController.productlist
-                                                    .removeAt(index);
-                                                Get.back();
-                                              },
-                                            )
-                                          ],
-                                        ));
-                                // getProduct();
-                              },
-                              child: Icon(
-                                Icons.delete,
-                                size: 23,
-                                color: Colors.red,
-                              ),
+                                                    productController
+                                                        .productlist
+                                                        .removeAt(index);
+                                                    Get.back();
+                                                  },
+                                                )
+                                              ],
+                                            ));
+                                    // getProduct();
+                                  },
+                                  child: Icon(
+                                    Icons.delete,
+                                    size: 23,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

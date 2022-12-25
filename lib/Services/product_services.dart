@@ -12,10 +12,13 @@ import 'dart:io' as Io;
 ProductController productController = Get.put(ProductController());
 Homecontroller homecontroller = Get.put(Homecontroller());
 
-Future<String> addProduct(Map data) async {
+Future<String> addProduct(Map data, {isClone = false}) async {
   var token = await getToken();
-  final bytes = Io.File(data["file"]).readAsBytesSync();
-  String base64Image = base64Encode(bytes);
+  String base64Image = "";
+  if (!isClone) {
+    final bytes = Io.File(data["file"]).readAsBytesSync();
+    base64Image = base64Encode(bytes);
+  }
   try {
     final response =
         await http.post(Uri.parse(baseUrl + '/api/Product/CreatePrduct'),
@@ -32,8 +35,12 @@ Future<String> addProduct(Map data) async {
                     "gujaratiname": data["gujaratiname"],
                     "productDesc": data["productDesc"],
                     "productGDesc": data["productGDesc"],
-                    "productImagePath": base64Image,
+                    "productImagePath":
+                        isClone ? data["productimagepath"] : base64Image,
                     "price": data["price"],
+                    "brandName": data["brandName"],
+                    "WeightType": data["WeightType"],
+                    "Weight": data["Weight"] ?? 0
                   })
                 : json.encode({
                     "categoryId": data["categoryId"],
@@ -41,8 +48,12 @@ Future<String> addProduct(Map data) async {
                     "gujaratiname": data["gujaratiname"],
                     "productDesc": data["productDesc"],
                     "productGDesc": data["productGDesc"],
-                    "productImagePath": base64Image,
+                    "productImagePath":
+                        isClone ? data["productimagepath"] : base64Image,
                     "price": data["price"],
+                    "brandName": data["brandName"],
+                    "WeightType": data["WeightType"],
+                    "Weight": data["Weight"] ?? 0
                   }),
             encoding: Encoding.getByName('utf-8'));
 
@@ -122,6 +133,8 @@ Future<String> updateProduct(Map data) async {
               "productGDesc": data["productGDesc"],
               "productImagePath": data["file"],
               "price": data["price"],
+              "WeightType": data["WeightType"],
+              "Weight": data["Weight"]
             }),
             encoding: Encoding.getByName('utf-8'));
 

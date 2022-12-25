@@ -106,8 +106,16 @@ class _CategoryPageState extends State<CategoryPage> {
                             //     textAlign: TextAlign.start,
                             //   ),
                             // ),
-                            Text("Eng Name: ${data['categoryName']}"),
-                            Text("Guj Name: ${data['categoryGName']}"),
+                            Text(
+                              "Eng Name: ${data['categoryName']}",
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              "Guj Name: ${data['categoryGName']}",
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ],
                         ),
                       ),

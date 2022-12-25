@@ -28,6 +28,7 @@ class _AddProductPageState extends State<AddProductPage> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   ImagePicker picker = ImagePicker();
   TextEditingController englishnamecontroller = TextEditingController(text: "");
+  TextEditingController weightcontroller = TextEditingController(text: "");
   TextEditingController gujaratinamecontroller =
       TextEditingController(text: "");
   TextEditingController productdesc = TextEditingController(text: "");
@@ -45,7 +46,11 @@ class _AddProductPageState extends State<AddProductPage> {
   List<Map> subcategoriesList = [];
   bool isSubavailable = false;
   Timer _timer;
+  String selectbrandName = "Select Brand";
+  String selectweight = "Select Weight";
 
+  List brandNameList = ["Select Brand", "Aroyam 1", "Arogyam 2", "Arogyam 3"];
+  List weightList = ["Select Weight", "Metre", "Gram", "Litre", "Kilo"];
   @override
   void initState() {
     super.initState();
@@ -70,7 +75,6 @@ class _AddProductPageState extends State<AddProductPage> {
         categoriesList.add(category);
       }
       // getsubcategotybycategory();
-
       setState(() {});
     });
   }
@@ -311,15 +315,136 @@ class _AddProductPageState extends State<AddProductPage> {
                           onChanged: (Map newValue) {
                             setState(() {
                               subcategorydropvalue = newValue;
-                              // if (subcategorydropvalue["id"] != "") {
-                              //   isSubavailable = false;
-                              // }
                               print(subcategorydropvalue);
                               print(isSubavailable);
                             });
                           },
                         ),
                       ),
+                    ),
+                    SizedBox(height: size.height * 0.02),
+                    Text(
+                      " Select Brand",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.01),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: Get.width * 0.80,
+                      height: 60,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: kPrimaryColor),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          menuMaxHeight: Get.height * 0.45,
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                            size: 35,
+                          ),
+                          isExpanded: true,
+                          value: selectbrandName,
+                          elevation: 5,
+                          style: const TextStyle(
+                              color: Colors.black54, fontSize: 16),
+                          items: brandNameList.map((items1) {
+                            return DropdownMenuItem(
+                              value: items1,
+                              child: Text(items1),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) {
+                            setState(() {
+                              selectbrandName = newValue;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.02),
+                    Text(
+                      " Weight Type",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.01),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          height: 60,
+                          width: Get.width * 0.2,
+                          child: TextFormField(
+                            cursorColor: kPrimaryColor,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              hintText: "0",
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: kPrimaryColor,
+                                  style: BorderStyle.solid,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: kPrimaryColor,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: kPrimaryColor,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                            controller: weightcontroller,
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          width: Get.width * 0.55,
+                          height: 60,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: kPrimaryColor),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              menuMaxHeight: Get.height * 0.45,
+                              icon: Icon(
+                                Icons.arrow_drop_down,
+                                size: 35,
+                              ),
+                              isExpanded: true,
+                              value: selectweight,
+                              elevation: 5,
+                              style: const TextStyle(
+                                  color: Colors.black54, fontSize: 16),
+                              items: weightList.map((items1) {
+                                return DropdownMenuItem(
+                                  value: items1,
+                                  child: Text(items1),
+                                );
+                              }).toList(),
+                              onChanged: (newValue) {
+                                setState(() {
+                                  selectweight = newValue;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: size.height * 0.02),
                     Text(
@@ -570,6 +695,12 @@ class _AddProductPageState extends State<AddProductPage> {
                         subcategorydropvalue["id"] == "") {
                       Fluttertoast.showToast(msg: "Please select subcategory");
                       // print(subcategorydropvalue["id"]);
+                    } else if (selectbrandName == "Select Brand") {
+                      Fluttertoast.showToast(msg: "Please select brand");
+                    } else if (weightcontroller.text == "") {
+                      Fluttertoast.showToast(msg: "Please Enter Weight");
+                    } else if (selectweight == "Select Weight") {
+                      Fluttertoast.showToast(msg: "Please Select Weight Type");
                     } else if (formkey.currentState.validate() &&
                         _image != null &&
                         categorydropdownvalue["id"] != "") {
@@ -588,7 +719,10 @@ class _AddProductPageState extends State<AddProductPage> {
                           "productDesc": productdesc.text,
                           "productGDesc": productgujdesc.text,
                           "price": pricecontroller.text,
-                          "file": value.path
+                          "brandName": selectbrandName,
+                          "WeightType": selectweight,
+                          "Weight": int.parse(weightcontroller.text),
+                          "file": value.path,
                         };
                         print(productData);
                         addProduct(productData).then((value) {

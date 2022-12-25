@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:aarogyamswadeshi/Admin/product/product_controller.dart';
 import 'package:aarogyamswadeshi/Services/product_services.dart';
-import 'package:aarogyamswadeshi/Services/subcategory_service.dart';
 import 'package:flutter/material.dart';
 import 'package:aarogyamswadeshi/Admin/category/category_controller.dart';
 import 'package:aarogyamswadeshi/Admin/subcategory/subcategory_controller.dart';
@@ -34,6 +33,7 @@ class UpdatedProductPageState extends State<UpdateProductPage> {
   TextEditingController gujaratinamecontroller = TextEditingController();
   TextEditingController productdesc = TextEditingController();
   TextEditingController productgujdesc = TextEditingController();
+  TextEditingController weightcontroller = TextEditingController(text: "");
   TextEditingController pricecontroller = TextEditingController();
   ProductController productController = Get.put(ProductController());
 
@@ -48,6 +48,8 @@ class UpdatedProductPageState extends State<UpdateProductPage> {
   bool isSubavailable = false;
   bool isImgUpdate = false;
   Timer _timer;
+  List weightList = ["Select Weight", "Metre", "Gram", "Litre", "Kilo"];
+  String selectweight = "Select Weight";
 
   @override
   void initState() {
@@ -408,6 +410,90 @@ class UpdatedProductPageState extends State<UpdateProductPage> {
                     ),
                     SizedBox(height: size.height * 0.02),
                     Text(
+                      " Weight Type",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.01),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          height: 60,
+                          width: Get.width * 0.2,
+                          child: TextFormField(
+                            cursorColor: kPrimaryColor,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              hintText: "0",
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: kPrimaryColor,
+                                  style: BorderStyle.solid,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: kPrimaryColor,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: kPrimaryColor,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                            controller: weightcontroller,
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          width: Get.width * 0.55,
+                          height: 60,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: kPrimaryColor),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              menuMaxHeight: Get.height * 0.45,
+                              icon: Icon(
+                                Icons.arrow_drop_down,
+                                size: 35,
+                              ),
+                              isExpanded: true,
+                              value: selectweight,
+                              elevation: 5,
+                              style: const TextStyle(
+                                  color: Colors.black54, fontSize: 16),
+                              items: weightList.map((items1) {
+                                return DropdownMenuItem(
+                                  value: items1,
+                                  child: Text(items1),
+                                );
+                              }).toList(),
+                              onChanged: (newValue) {
+                                setState(() {
+                                  selectweight = newValue;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: size.height * 0.02),
+
+                    Text(
                       " English Description)",
                       style: TextStyle(
                         fontSize: 16,
@@ -568,53 +654,59 @@ class UpdatedProductPageState extends State<UpdateProductPage> {
                     // if (formkey.currentState.validate() &&
                     //     _image != null &&
                     //     categorydropdownvalue["id"] != "") {
+                    if (weightcontroller.text == "") {
+                      Fluttertoast.showToast(msg: "Please Enter Weight");
+                    } else if (selectweight == "Select Weight") {
+                      Fluttertoast.showToast(msg: "Please Select Weight Type");
+                    } else {
+                      if (formkey.currentState.validate()) {
+                        //   // formkey.currentState.save();
+                        EasyLoading.show(status: 'Loading...');
 
-                    if (formkey.currentState.validate()) {
-                      //   // formkey.currentState.save();
-                      EasyLoading.show(status: 'Loading...');
+                        final dir = await path_provider.getTemporaryDirectory();
+                        final targetPath = dir.absolute.path + "/temp.jpg";
 
-                      final dir = await path_provider.getTemporaryDirectory();
-                      final targetPath = dir.absolute.path + "/temp.jpg";
-
-                      Map productData;
-                      if (isImgUpdate) {
-                        await testCompressAndGetFile(_image, targetPath)
-                            .then((value) {
-                          final bytes = Io.File(value.path).readAsBytesSync();
-                          String base64Image = base64Encode(bytes);
+                        Map productData;
+                        if (isImgUpdate) {
+                          await testCompressAndGetFile(_image, targetPath)
+                              .then((value) {
+                            final bytes = Io.File(value.path).readAsBytesSync();
+                            String base64Image = base64Encode(bytes);
+                            productData = {
+                              // "categoryId": categorydropdownvalue["id"],
+                              // "subcategoryId": subcategorydropvalue["id"],
+                              "productId": widget.data["productId"],
+                              "englishname": englishnamecontroller.text,
+                              "gujaratiname": gujaratinamecontroller.text,
+                              "productDesc": productdesc.text,
+                              "productGDesc": productgujdesc.text,
+                              "price": pricecontroller.text,
+                              "WeightType": selectweight,
+                              "Weight": int.parse(weightcontroller.text),
+                              "file": base64Image
+                            };
+                          });
+                        } else {
+                          print(subcategorydropvalue["id"]);
                           productData = {
-                            // "categoryId": categorydropdownvalue["id"],
-                            // "subcategoryId": subcategorydropvalue["id"],
                             "productId": widget.data["productId"],
                             "englishname": englishnamecontroller.text,
                             "gujaratiname": gujaratinamecontroller.text,
                             "productDesc": productdesc.text,
                             "productGDesc": productgujdesc.text,
                             "price": pricecontroller.text,
-                            "file": base64Image
+                            "WeightType": selectweight,
+                            "Weight": int.parse(weightcontroller.text),
+                            "file": widget.data["productimagepath"]
                           };
+                        }
+                        print(productData);
+                        updateProduct(productData).then((value) {
+                          EasyLoading.dismiss();
+
+                          Fluttertoast.showToast(msg: value);
                         });
-                      } else {
-                        print(subcategorydropvalue["id"]);
-                        productData = {
-                          // "categoryId": categorydropdownvalue["id"],
-                          // "subcategoryId": subcategorydropvalue["id"],
-                          "productId": widget.data["productId"],
-                          "englishname": englishnamecontroller.text,
-                          "gujaratiname": gujaratinamecontroller.text,
-                          "productDesc": productdesc.text,
-                          "productGDesc": productgujdesc.text,
-                          "price": pricecontroller.text,
-                          "file": widget.data["productimagepath"]
-                        };
                       }
-                      print(productData);
-
-                      updateProduct(productData).then((value) {
-                        EasyLoading.dismiss();
-
-                        Fluttertoast.showToast(msg: value);
-                      });
                     }
                   },
                   style: ElevatedButton.styleFrom(
