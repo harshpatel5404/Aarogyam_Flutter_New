@@ -5,6 +5,8 @@ import 'dart:math';
 import 'package:aarogyamswadeshi/Screens/Home/home_main.dart';
 import 'package:aarogyamswadeshi/Screens/Signup/background.dart';
 import 'package:aarogyamswadeshi/Screens/account/account_controller.dart';
+import 'package:aarogyamswadeshi/Screens/email_screen.dart';
+import 'package:aarogyamswadeshi/Screens/signup_login.dart';
 import 'package:aarogyamswadeshi/Services/login_services.dart';
 import 'package:flutter/material.dart';
 import 'package:aarogyamswadeshi/Screens/Home/home_page.dart';
@@ -64,6 +66,16 @@ class _AccountScreenState extends State<AccountScreen> {
         backgroundColor: kPrimaryColor,
         centerTitle: true,
         title: Text("Account"),
+        actions: [
+          InkWell(
+              onTap: () {
+                removeToken();
+                removelogin();
+                removeuserid();
+                Get.offAll(EmailScreen());
+              },
+              child: Icon(Icons.logout_rounded)),
+        ],
         // actions: [
         //   PopupMenuButton(
         //     itemBuilder: (_) => <PopupMenuItem<String>>[
