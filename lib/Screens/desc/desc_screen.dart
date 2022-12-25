@@ -200,18 +200,44 @@ class _HomeCategoryProductDescriptionState
                     ),
 
                     //availble in stock
-                    Container(
-                        margin: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * 0.05),
-                        child: Text(
-                          widget.productdatalist["isProductAvailable"]
-                              ? "Available"
-                              : "Not Available",
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black),
-                        )),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                            margin: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.05),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Weight : ",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: kPrimaryColor),
+                                ),
+                                Text(
+                                  widget.productdatalist["weight"],
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black),
+                                ),
+                              ],
+                            )),
+                        Container(
+                            margin: EdgeInsets.only(
+                                right: MediaQuery.of(context).size.width * 0.05),
+                            child: Text(
+                              widget.productdatalist["isProductAvailable"]
+                                  ? "Available"
+                                  : "Not Available",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black),
+                            )),
+                      ],
+                    ),
                     SizedBox(
                       height: 10,
                     ),

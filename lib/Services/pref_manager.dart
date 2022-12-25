@@ -131,6 +131,15 @@ Future<void> setUserinfo({name, email, password, phone, lang}) async {
   prefs.setInt('lang', lang ?? 1);
 }
 
+Future<void> clearUserinfo() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.remove('name');
+  prefs.remove('email');
+  prefs.remove('password');
+  prefs.remove('phone');
+  prefs.remove('lang');
+}
+
 Future<String> getEmail() async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getString('email');

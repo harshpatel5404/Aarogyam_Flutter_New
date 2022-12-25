@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:aarogyamswadeshi/Screens/Home/home_main.dart';
+import 'package:aarogyamswadeshi/Screens/Home/home_main.dart';
 import 'package:aarogyamswadeshi/Screens/Signup/passcode_screen.dart';
 import 'package:aarogyamswadeshi/Screens/Signup/user_info.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class Otp extends StatefulWidget {
 
 class _OtpState extends State<Otp> {
   OtpFieldController otpController = OtpFieldController();
+  MainController mainController = Get.put(MainController());
   String otp = "";
   int secondsRemaining = 60;
   bool enableResend = false;
@@ -182,9 +184,12 @@ class _OtpState extends State<Otp> {
                                       "OTP verify sucessfully!");
                                   EasyLoading.dismiss();
                                   if (await getname() == "Not Available") {
-                                    Get.off(UserInfoScreen());
+                                    Get.off(UserInfoScreen(
+                                      idFromLogin: true,
+                                    ));
                                   } else {
                                     setlogin(true);
+                                    mainController.currentIndex.value = 0;
                                     Get.offAll(MainScreen());
                                   }
                                 }

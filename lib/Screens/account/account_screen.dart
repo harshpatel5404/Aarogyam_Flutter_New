@@ -24,7 +24,7 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  AccountController accountController = Get.put(AccountController());
+  MainController mainController = Get.put(MainController());
 
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   TextEditingController fnameController = TextEditingController();
@@ -33,6 +33,7 @@ class _AccountScreenState extends State<AccountScreen> {
   TextEditingController cityController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController bussinessController = TextEditingController();
+  AccountController accountController = Get.find();
   Timer _timer;
 
   void setuserdetails() {
@@ -48,6 +49,7 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   void initState() {
     super.initState();
+
     EasyLoading.addStatusCallback((status) {
       print('EasyLoading Status $status');
       if (status == EasyLoadingStatus.dismiss) {
@@ -69,12 +71,40 @@ class _AccountScreenState extends State<AccountScreen> {
         actions: [
           InkWell(
               onTap: () {
-                removeToken();
-                removelogin();
-                removeuserid();
-                Get.offAll(EmailScreen());
+                showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                          contentPadding: EdgeInsets.all(15),
+                          content: Text("Are You Sure Want to Logout?"),
+                          actions: <Widget>[
+                            ElevatedButton(
+                              child: Text("Cancel"),
+                              onPressed: () {
+                                Get.back();
+                              },
+                            ),
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(kPrimaryColor)),
+                              child: Text("Yes"),
+                              onPressed: () {
+                                mainController.currentIndex.value = 0;
+                                removeToken();
+                                removelogin();
+                                removeuserid();
+                                clearUserinfo();
+
+                                Get.offAll(EmailScreen());
+                              },
+                            )
+                          ],
+                        ));
               },
-              child: Icon(Icons.logout_rounded)),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10.0),
+                child: Icon(Icons.logout_rounded),
+              )),
         ],
         // actions: [
         //   PopupMenuButton(

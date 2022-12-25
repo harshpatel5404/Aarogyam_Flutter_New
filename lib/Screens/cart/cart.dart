@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:aarogyamswadeshi/Constants/constants.dart';
+import 'package:aarogyamswadeshi/Screens/Signup/user_info.dart';
 import 'package:aarogyamswadeshi/Screens/cart/cart_controller.dart';
 import 'package:aarogyamswadeshi/Services/cart_service.dart';
+import 'package:aarogyamswadeshi/Services/pref_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -421,65 +423,74 @@ class _CartState extends State<Cart> {
                 ),
                 Obx(
                   () => cartController.cartlist.isNotEmpty
-                      ? FlatButton(
+                      ? MaterialButton(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
                           color: kPrimaryColor,
                           textColor: Colors.white,
                           child: Text('Place Order'),
                           onPressed: () async {
-                            showDialog(
-                                context: context,
-                                builder: (ctx) => AlertDialog(
-                                      content: Text(
-                                          "Are you sure want to confirm your order?"),
-                                      actions: <Widget>[
-                                        ElevatedButton(
-                                          child: Text("Close"),
-                                          onPressed: () async {
-                                            Get.back();
-                                          },
-                                        ),
-                                        ElevatedButton(
-                                          style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      kPrimaryColor)),
-                                          child: Text("Yes"),
-                                          onPressed: () async {
-                                            EasyLoading.show(
-                                                status: "Loding...");
-                                            var lastele =
-                                                cartController.cartlist.last;
-                                            cartController.cartlist
-                                                .forEach((element) {
-                                              placeOrder(element).then((value) {
-                                                if (lastele == element) {
-                                                  EasyLoading.dismiss();
-                                                  if (value ==
-                                                      "Order Placed successfully") {
-                                                    Fluttertoast.showToast(
-                                                        msg: value);
-                                                    cartController.cartlist
-                                                        .clear();
-                                                    clearCart();
-                                                    cartController
-                                                        .carttotal.value = 0;
-                                                    cartController.iscartload
-                                                        .value = false;
+                            if (await getname() == "Not Available") {
+                              Fluttertoast.showToast(
+                                  msg: "Please complate your profile");
+                              Get.to(UserInfoScreen(
+                                idFromLogin: false,
+                              ));
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                        content: Text(
+                                            "Are you sure want to confirm your order?"),
+                                        actions: <Widget>[
+                                          ElevatedButton(
+                                            child: Text("Close"),
+                                            onPressed: () async {
+                                              Get.back();
+                                            },
+                                          ),
+                                          ElevatedButton(
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        kPrimaryColor)),
+                                            child: Text("Yes"),
+                                            onPressed: () async {
+                                              EasyLoading.show(
+                                                  status: "Loding...");
+                                              var lastele =
+                                                  cartController.cartlist.last;
+                                              cartController.cartlist
+                                                  .forEach((element) {
+                                                placeOrder(element)
+                                                    .then((value) {
+                                                  if (lastele == element) {
+                                                    EasyLoading.dismiss();
+                                                    if (value ==
+                                                        "Order Placed successfully") {
+                                                      Fluttertoast.showToast(
+                                                          msg: value);
+                                                      cartController.cartlist
+                                                          .clear();
+                                                      clearCart();
+                                                      cartController
+                                                          .carttotal.value = 0;
+                                                      cartController.iscartload
+                                                          .value = false;
+                                                    }
                                                   }
-                                                }
+                                                });
                                               });
-                                            });
 
-                                            Get.back();
-                                          },
-                                        )
-                                      ],
-                                    ));
+                                              Get.back();
+                                            },
+                                          )
+                                        ],
+                                      ));
+                            }
                           },
                         )
-                      : FlatButton(
+                      : MaterialButton(
                           onPressed: () {},
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),

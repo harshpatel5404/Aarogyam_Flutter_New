@@ -37,7 +37,7 @@ class _OrderScreenState extends State<OrderScreen>
             backgroundColor: kPrimaryColor,
             title: Text(
               "Your Orders",
-              style: TextStyle(fontSize: 24),
+              // style: TextStyle(fontSize: 24),
             ),
             centerTitle: true,
             bottom: PreferredSize(

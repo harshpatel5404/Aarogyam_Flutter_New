@@ -128,14 +128,52 @@ class _MainHomeState extends State<MainScreen> {
                             onTap: () {
                               MainHomeController.currentIndex.value = 2;
                             },
-                            child: Obx(() => Icon(
-                                  Icons.shopping_bag_outlined,
-                                  size:
-                                      MediaQuery.of(context).size.width * 0.08,
-                                  color:
-                                      MainHomeController.currentIndex.value == 2
+                            child: Obx(() => Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Icon(
+                                      Icons.shopping_bag_outlined,
+                                      size: MediaQuery.of(context).size.width *
+                                          0.08,
+                                      color: MainHomeController
+                                                  .currentIndex.value ==
+                                              2
                                           ? kPrimaryColor
                                           : Colors.black,
+                                    ),
+                                    if (cartController.cartlist.isNotEmpty)
+                                      Positioned(
+                                          top: -2,
+                                          right: -6,
+                                          child: Container(
+                                            height: 20,
+                                            width:
+                                                cartController.cartlist.length >
+                                                        9
+                                                    ? 25
+                                                    : 20,
+                                            decoration: BoxDecoration(
+                                                color: kPrimaryColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            // padding: EdgeInsets.only(
+                                            //   left: 5,
+                                            //   bottom: 3,
+                                            // ),
+                                            child: Center(
+                                              child: Text(
+                                                cartController.cartlist.length >
+                                                        9
+                                                    ? "${cartController.cartlist.length}+"
+                                                    : "${cartController.cartlist.length}",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ))
+                                  ],
                                 ))),
                         InkWell(
                           onTap: () {
@@ -147,8 +185,6 @@ class _MainHomeState extends State<MainScreen> {
                                   : Colors.black,
                               size: MediaQuery.of(context).size.width * 0.08)),
                         ),
-
-
                         InkWell(
                           onTap: () {
                             MainHomeController.currentIndex.value = 4;
@@ -159,11 +195,10 @@ class _MainHomeState extends State<MainScreen> {
                                   : Colors.black,
                               size: MediaQuery.of(context).size.width * 0.08)),
                         ),
-                        
                       ],
                     ),
                   )
-                ], 
+                ],
               ),
             )
           : Scaffold(

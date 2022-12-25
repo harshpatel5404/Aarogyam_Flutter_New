@@ -58,11 +58,11 @@ class _EmailScreenState extends State<EmailScreen> {
                             fontSize: 22,
                           ),
                         ),
-                        SizedBox(height: size.height * 0.03),
+                        SizedBox(height: size.height * 0.01),
                         Container(
                             child: Image.asset(
                           "assets/images/logo.png",
-                          height: Get.height * 0.2,
+                          height: Get.height * 0.3,
                           width: Get.width,
                         )),
                         SizedBox(height: size.height * 0.03),

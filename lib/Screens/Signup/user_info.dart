@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:aarogyamswadeshi/Screens/Home/home_main.dart';
+import 'package:aarogyamswadeshi/Services/login_services.dart';
 import 'package:aarogyamswadeshi/Services/pref_manager.dart';
 import 'package:aarogyamswadeshi/Services/signup_service.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,9 @@ import 'package:get/get.dart';
 import 'background.dart';
 
 class UserInfoScreen extends StatefulWidget {
+  final bool idFromLogin;
+  const UserInfoScreen({Key key, this.idFromLogin}) : super(key: key);
+
   @override
   State<UserInfoScreen> createState() => _UserInfoScreenState();
 }
@@ -19,13 +23,13 @@ class UserInfoScreen extends StatefulWidget {
 class _UserInfoScreenState extends State<UserInfoScreen> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   TextEditingController fnameController = TextEditingController(text: "");
-  // TextEditingController snameController = TextEditingController(text: "");
   TextEditingController lnameController = TextEditingController(text: "");
   TextEditingController adressController = TextEditingController(text: "");
   TextEditingController mobileController = TextEditingController(text: "");
   TextEditingController cityController = TextEditingController(text: "");
   TextEditingController stateController = TextEditingController(text: "");
   TextEditingController bussinessController = TextEditingController(text: "");
+
   Timer _timer;
   @override
   void initState() {
@@ -449,13 +453,21 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             // "password": randomString(6)
                           };
                           print(userdata);
-                          updateUser(userdata).then((value) {
+                          updateUser(userdata).then((value) async {
                             print(value);
                             if (value == "User updated") {
                               EasyLoading.showSuccess("Login Sucessfully");
                               EasyLoading.dismiss();
                               setlogin(true);
-                              Get.offAll(MainScreen());
+                              await setUserinfo(
+                                name: fnameController.text,
+                                phone: mobileController.text,
+                              );
+                              if (widget.idFromLogin) {
+                                Get.offAll(MainScreen());
+                              } else {
+                                Get.back();
+                              }
                             } else {
                               EasyLoading.dismiss();
                               Fluttertoast.showToast(
@@ -473,6 +485,34 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                               color: Colors.white,
                               fontSize: 14,
                               fontWeight: FontWeight.w500)),
+                    ),
+                  ),
+                ),
+                SizedBox(height: size.height * 0.01),
+                Center(
+                  child: InkWell(
+                    onTap: () {
+                      setlogin(true);
+                      MainHomeController.currentIndex.value = 0;
+                      if (widget.idFromLogin) {
+                        Get.offAll(MainScreen());
+                      } else {
+                        Get.back();
+                      }
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: kPrimaryColor, width: 1),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Text(
+                        "Skip ➜",
+                        style: TextStyle(
+                            color: kPrimaryColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500),
+                      ),
                     ),
                   ),
                 ),

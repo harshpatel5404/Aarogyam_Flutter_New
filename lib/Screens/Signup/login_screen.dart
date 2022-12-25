@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Container(
                     child: Image.asset(
                   "assets/images/logo.png",
-                  height: Get.height * 0.2,
+                  height: Get.height * 0.3,
                   width: Get.width,
                 )),
                 Padding(
