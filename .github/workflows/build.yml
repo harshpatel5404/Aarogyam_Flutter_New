@@ -25,7 +25,7 @@ jobs:
           architecture: x64
       - run: flutter clean
       - run: flutter pub get
-      - run: flutter build apk --ignore-deprecation
+      - run: flutter build apk
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with: 
