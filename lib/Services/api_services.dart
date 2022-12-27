@@ -1,1 +1,1 @@
-String baseUrl = "http://164.68.96.17:8081";
+String baseUrl = "https://aarogyam-devapi.manarsh.com";
