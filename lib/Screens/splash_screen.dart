@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'package:aarogyamswadeshi/Screens/Home/home_main.dart';
 import 'package:aarogyamswadeshi/Screens/Signup/passcode_screen.dart';
-import 'package:aarogyamswadeshi/Screens/Signup/user_info.dart';
 import 'package:aarogyamswadeshi/Services/pref_manager.dart';
+import 'package:aarogyamswadeshi/global/get_permission.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
 import 'email_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -23,11 +22,12 @@ class _SplashScreenState extends State<SplashScreen> {
       statusBarColor: Colors.transparent,
     ));
     super.initState();
+    getPermission();
     // removeToken();
     // removelogin();
     // removeuserid();
     // removeisAdmin();
-    
+
     Timer(const Duration(seconds: 3), () async {
       if (await getlogin() == true) {
         if (await getisAdmin() == true) {

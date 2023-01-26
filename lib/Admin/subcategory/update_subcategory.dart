@@ -89,8 +89,6 @@ class _UpdatesubcategoryState extends State<Updatesubcategory> {
     var result = await FlutterImageCompress.compressAndGetFile(
         file.absolute.path, targetPath,
         quality: 70, rotate: 0);
-    // print("file" + file.lengthSync().toString());
-    // print(result.lengthSync());
     return result;
   }
 
@@ -188,8 +186,7 @@ class _UpdatesubcategoryState extends State<Updatesubcategory> {
               padding: const EdgeInsets.symmetric(horizontal: 35),
               child: Form(
                 key: formkey,
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.,
+                child: Column(  
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -397,7 +394,7 @@ class _UpdatesubcategoryState extends State<Updatesubcategory> {
                 ),
               ),
             ),
-            SizedBox(height: size.height * 0.03),
+            SizedBox(height: size.height * 0.05),
           ],
         ),
       ),

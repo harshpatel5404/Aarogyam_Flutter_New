@@ -44,7 +44,7 @@ class UpdatedcategoryPageState extends State<UpdatecategoryPage> {
       val = 2;
     }
     setState(() {});
-     EasyLoading.addStatusCallback((status) {
+    EasyLoading.addStatusCallback((status) {
       print('EasyLoading Status $status');
       if (status == EasyLoadingStatus.dismiss) {
         _timer?.cancel();
@@ -362,7 +362,7 @@ class UpdatedcategoryPageState extends State<UpdatecategoryPage> {
                         "file": widget.data["imagepath"]
                       };
                       print("-----");
-                      // print(updatecategorydata);
+                      print(updatecategorydata);
                     }
                     updateCategory(updatecategorydata).then((value) {
                       EasyLoading.dismiss();

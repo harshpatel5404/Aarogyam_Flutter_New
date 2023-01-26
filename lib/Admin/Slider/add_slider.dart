@@ -6,6 +6,7 @@ import 'package:aarogyamswadeshi/Admin/Slider/slider_controller.dart';
 import 'package:aarogyamswadeshi/Admin/widget/drawer.dart';
 import 'package:aarogyamswadeshi/Services/admin_services.dart';
 import 'package:aarogyamswadeshi/Services/pref_manager.dart';
+import 'package:aarogyamswadeshi/global/get_permission.dart';
 import 'package:flutter/material.dart';
 import 'package:aarogyamswadeshi/Admin/category/category_controller.dart';
 import 'package:aarogyamswadeshi/Constants/constants.dart';
@@ -49,6 +50,7 @@ class _AddSliderImagesState extends State<AddSliderImages> {
   }
 
   Future<void> loadAssets() async {
+    getPermission();
     List<Asset> resultList = <Asset>[];
     images = <Asset>[];
     String error = 'No Error Detected';

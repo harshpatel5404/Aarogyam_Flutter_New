@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:aarogyamswadeshi/Screens/Home/search_page.dart';
 import 'package:aarogyamswadeshi/Screens/cart/cart.dart';
 import 'package:aarogyamswadeshi/Screens/desc/buynow_bottom.dart';
@@ -21,7 +20,6 @@ import 'package:aarogyamswadeshi/Screens/account/account_screen.dart';
 import 'package:aarogyamswadeshi/Screens/category/category_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
 import 'home_controller.dart';
 
 class MainController extends GetxController {
@@ -56,10 +54,6 @@ class _MainHomeState extends State<MainScreen> {
       statusBarColor: kPrimaryColor,
     ));
     super.initState();
-    // removeToken();
-    // removeisAdmin();
-    // removelogin();
-    // removeuserid();
 
     controller.getConnect();
     getImages().then((value) {

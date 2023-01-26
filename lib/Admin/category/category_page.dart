@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:aarogyamswadeshi/Admin/widget/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:aarogyamswadeshi/Admin/category/category_controller.dart';
@@ -50,8 +49,6 @@ class _CategoryPageState extends State<CategoryPage> {
               var data = categoryController.categorylist[index];
               String imgString = data["imagepath"];
               Uint8List img = base64.decode(imgString);
-              // print("get" + img.lengthInBytes.toString());
-              // print(data);
               return Container(
                 height: Get.height * 0.14,
                 width: Get.width,
@@ -96,24 +93,14 @@ class _CategoryPageState extends State<CategoryPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Container(
-                            //   child: Text(
-                            //     data["categoryId"].toString(),
-                            //     style: TextStyle(
-                            //         fontSize: 15,
-                            //         color: Colors.black,
-                            //         fontWeight: fontweight.w500),
-                            //     textAlign: TextAlign.start,
-                            //   ),
-                            // ),
                             Text(
-                              "Eng Name: ${data['categoryName']}",
+                              "Name : ${data['categoryName']}",
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
                             Text(
-                              "Guj Name: ${data['categoryGName']}",
-                              maxLines: 2,
+                              "Guj : ${data['categoryGName']}",
+                              maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ],
@@ -209,7 +196,6 @@ class _CategoryPageState extends State<CategoryPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPrimaryColor,
         onPressed: () {
-          // getCategory();
           Get.to(AddcategoryPage());
         },
         child: Icon(Icons.add),

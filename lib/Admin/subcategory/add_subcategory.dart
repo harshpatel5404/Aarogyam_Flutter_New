@@ -130,7 +130,6 @@ class _AddsubcategoryPageState extends State<AddsubcategoryPage> {
         centerTitle: true,
         backgroundColor: kPrimaryColor,
       ),
-      // resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -386,7 +385,7 @@ class _AddsubcategoryPageState extends State<AddsubcategoryPage> {
                 ),
               ),
             ),
-            SizedBox(height: size.height * 0.03),
+            SizedBox(height: size.height * 0.05),
           ],
         ),
       ),
